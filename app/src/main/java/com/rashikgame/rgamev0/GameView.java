@@ -60,20 +60,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (event.getAction())
         {
-            case MotionEvent.ACTION_DOWN:
+            case (MotionEvent.ACTION_DOWN):
                 drawingThread.allRobots.add(new Robot(drawingThread.allPossibleRobots.get(random.nextInt(5)), touchPoint));
 
-                break;
-            case MotionEvent.ACTION_UP:
+                return true;
+            case (MotionEvent.ACTION_UP):
 
-                break;
-            case MotionEvent.ACTION_MOVE:
+                return true;
+            case (MotionEvent.ACTION_MOVE):
                 drawingThread.allRobots.get(drawingThread.allRobots.size()-1).setCenter(touchPoint);
 
-                break;
+                return true;
 
             default:
                 break;
+
         }
 
         return super.onTouchEvent(event);

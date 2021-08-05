@@ -6,8 +6,10 @@ import android.graphics.Point;
 
 public class Robot {
 
-    int centerX,centerY;
+    float centerX,centerY;
     int height,width;
+    float velocityX,velocityY;
+
     Bitmap robotBitmap;
     Paint robotPaint;
 
@@ -18,6 +20,7 @@ public class Robot {
         height=robotBitmap.getHeight();
         width=robotBitmap.getWidth();
         robotPaint=new Paint();
+        velocityX=velocityY=0;
     }
     public Robot(Bitmap bitmap,int cX,int cY)
     {

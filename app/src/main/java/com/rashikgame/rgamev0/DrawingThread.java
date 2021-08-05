@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
@@ -53,11 +55,11 @@ public class DrawingThread extends Thread {
         allPossibleRobots=new ArrayList<Bitmap>();
 
         allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot0));
-        //allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot1));
-        //allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot2));
+        allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot9));
+        allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot10));
         allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot3));
         allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot4));
-        //allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robotnew5));
+        //allPossibleRobots.add(giveResizedRobotBitmap(R.drawable.robot9));
     }
 
     private Bitmap giveResizedRobotBitmap(int resourceID)
@@ -72,6 +74,8 @@ public class DrawingThread extends Thread {
     @Override
     public void run() {
         ThreadFlag=true;
+        AnimationThread animationThread=new AnimationThread(this);
+        animationThread.start();
 
         while(ThreadFlag)
         {
@@ -93,12 +97,13 @@ public class DrawingThread extends Thread {
             }
 
             try {
-                Thread.sleep(17);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
         }
+        animationThread.stopThread();
     }
 
     private void updateDisplay() {
@@ -110,10 +115,21 @@ public class DrawingThread extends Thread {
             canvas.drawBitmap(tempRobot.robotBitmap,tempRobot.centerX-(tempRobot.width/2),
                     tempRobot.centerY-(tempRobot.height/2),tempRobot.robotPaint);
         }
+        //drawSensorData();
     }
 
     public void stopThread()
     {
         ThreadFlag=false;
     }
+
+   /* private void drawSensorData()
+    {
+        Paint paint=new Paint();
+        paint.setColor(Color.GREEN);
+        paint.setTextSize(displayX/10);
+
+        canvas.drawText("X axis: "+GameActivity.getgX(),0,displayY/3,paint);
+        canvas.drawText("Y axis: "+GameActivity.getgY(),0,displayY/3+displayX/5,paint);
+    }*/
 }
