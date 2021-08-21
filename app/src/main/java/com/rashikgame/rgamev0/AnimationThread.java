@@ -43,10 +43,21 @@ public class AnimationThread extends Thread{
         gravityX=GameActivity.getgX();
         gravityY=GameActivity.getgY();
 
-        for (int i=0;i<drawingThread.allRobots.size();i++)
+        if (drawingThread.touchedFlag)
         {
-            updateRobotsPosition(drawingThread.allRobots.get(i));
+            for (int i=0;i<drawingThread.allRobots.size()-1;i++)
+            {
+                updateRobotsPosition(drawingThread.allRobots.get(i));
+            }
         }
+        else
+        {
+            for (int i=0;i<drawingThread.allRobots.size();i++)
+            {
+                updateRobotsPosition(drawingThread.allRobots.get(i));
+            }
+        }
+
 
     }
 

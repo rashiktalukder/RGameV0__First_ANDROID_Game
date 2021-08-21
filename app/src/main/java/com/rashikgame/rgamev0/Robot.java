@@ -3,6 +3,7 @@ package com.rashikgame.rgamev0;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.view.VelocityTracker;
 
 public class Robot {
 
@@ -38,6 +39,11 @@ public class Robot {
     {
         centerX=centerPoint.x;
         centerY=centerPoint.y;
+    }
+    public void setVelocity(VelocityTracker velocityTracker)
+    {
+        velocityX=velocityTracker.getXVelocity();
+        velocityY=velocityTracker.getYVelocity();
     }
 
 }

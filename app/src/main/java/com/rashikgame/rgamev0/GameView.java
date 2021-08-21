@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.VelocityTracker;
 
 import androidx.annotation.NonNull;
 
@@ -15,6 +16,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     Context context;
     SurfaceHolder surfaceHolder;
     DrawingThread drawingThread;
+    VelocityTracker velocityTracker;
 
     public GameView(Context context) {
         super(context);
@@ -23,6 +25,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
 
         drawingThread=new DrawingThread(this,context);
+        velocityTracker=VelocityTracker.obtain();
     }
 
     @Override
@@ -61,13 +64,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         switch (event.getAction())
         {
             case (MotionEvent.ACTION_DOWN):
+
+                drawingThread.touchedFlag=true;
                 drawingThread.allRobots.add(new Robot(drawingThread.allPossibleRobots.get(random.nextInt(5)), touchPoint));
 
                 return true;
             case (MotionEvent.ACTION_UP):
+                velocityTracker.computeCurrentVelocity(30);
+                drawingThread.allRobots.get(drawingThread.allRobots.size()-1).setVelocity(velocityTracker);
+                drawingThread.touchedFlag=false;
 
                 return true;
             case (MotionEvent.ACTION_MOVE):
+                velocityTracker.addMovement(event);
                 drawingThread.allRobots.get(drawingThread.allRobots.size()-1).setCenter(touchPoint);
 
                 return true;

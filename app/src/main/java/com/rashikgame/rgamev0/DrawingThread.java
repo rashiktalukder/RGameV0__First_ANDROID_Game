@@ -19,6 +19,7 @@ public class DrawingThread extends Thread {
     private Context context;
 
     boolean ThreadFlag=false;
+    boolean touchedFlag=false;
     Bitmap backgroundBitmap;
 
     int displayX,displayY;
