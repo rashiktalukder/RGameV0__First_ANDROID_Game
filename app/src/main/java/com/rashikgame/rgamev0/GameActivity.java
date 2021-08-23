@@ -9,6 +9,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
 import android.view.WindowManager;
 
 public class GameActivity extends Activity {
@@ -41,10 +43,11 @@ public class GameActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        gameView=new GameView(this);
+       // gameView=new GameView(this);
         initializeSensors();
 
-        setContentView(gameView);
+        setContentView(R.layout.activity_game);
+        gameView=(GameView) findViewById(R.id.myGameView);
     }
 
     private void initializeSensors() {
@@ -94,5 +97,34 @@ public class GameActivity extends Activity {
     protected void onStop() {
         stopUsingSensors();
         super.onStop();
+    }
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        return true;
+    }
+
+    public void pauseGame(View view)
+    {
+        if(gameView.drawingThread.pauseFlag==false)
+        {
+            gameView.drawingThread.animationThread.stopThread();
+            gameView.drawingThread.pauseFlag=true;
+            view.setBackgroundResource(R.drawable.unlock);
+        }
+        else
+        {
+            gameView.drawingThread.animationThread=new AnimationThread(gameView.drawingThread);
+            gameView.drawingThread.animationThread.start();
+            view.setBackgroundResource(R.drawable.stop);
+            gameView.drawingThread.pauseFlag=false;
+        }
+    }
+    public void restartGame(View view)
+    {
+        gameView.drawingThread.allRobots.clear();
+    }
+    public void stopGame(View view)
+    {
+        this.finish();
     }
 }

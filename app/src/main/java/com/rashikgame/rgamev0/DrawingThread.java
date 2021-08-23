@@ -20,12 +20,15 @@ public class DrawingThread extends Thread {
 
     boolean ThreadFlag=false;
     boolean touchedFlag=false;
+    boolean pauseFlag=false;
     Bitmap backgroundBitmap;
 
     int displayX,displayY;
 
     ArrayList<Robot> allRobots;
     ArrayList<Bitmap> allPossibleRobots;
+
+    AnimationThread animationThread;
 
     public DrawingThread( GameView gameView, Context context) {
         //this.canvas = canvas;
@@ -75,7 +78,7 @@ public class DrawingThread extends Thread {
     @Override
     public void run() {
         ThreadFlag=true;
-        AnimationThread animationThread=new AnimationThread(this);
+        animationThread=new AnimationThread(this);
         animationThread.start();
 
         while(ThreadFlag)
@@ -117,6 +120,23 @@ public class DrawingThread extends Thread {
                     tempRobot.centerY-(tempRobot.height/2),tempRobot.robotPaint);
         }
         //drawSensorData();
+        if(pauseFlag)
+        {
+            pauseStateDraw();
+        }
+
+    }
+
+    private void pauseStateDraw() {
+        Paint paint=new Paint();
+        paint.setColor(Color.GREEN);
+        paint.setTextSize(100);
+        paint.setAlpha(150);
+        paint.setTextAlign(Paint.Align.CENTER);
+
+
+        canvas.drawARGB(170,0,0,0);
+        canvas.drawText("PAUSED",displayX/2,displayY/2,paint);
     }
 
     public void stopThread()

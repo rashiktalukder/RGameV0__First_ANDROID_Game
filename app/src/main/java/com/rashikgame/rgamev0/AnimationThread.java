@@ -84,13 +84,14 @@ public class AnimationThread extends Thread{
             robot.velocityX*=retardationRatio;
 
         }
-        if(robot.centerY<top)
+        /*if(robot.centerY<top)
         {
             robot.centerY=top;
             robot.velocityY*=retardationRatio;
 
         }
-        else if(robot.centerY>bottom)
+        else*/
+        if(robot.centerY>bottom)
         {
             robot.centerY=bottom;
             robot.velocityY
@@ -100,6 +101,6 @@ public class AnimationThread extends Thread{
 
     public void stopThread()
     {
-
+        flag=false;
     }
 }

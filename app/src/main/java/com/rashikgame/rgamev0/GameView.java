@@ -2,12 +2,15 @@ package com.rashikgame.rgamev0;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Build;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.VelocityTracker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.Random;
 
@@ -20,6 +23,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public GameView(Context context) {
         super(context);
+        this.context=context;
+        surfaceHolder=getHolder();
+        surfaceHolder.addCallback(this);
+
+        drawingThread=new DrawingThread(this,context);
+        velocityTracker=VelocityTracker.obtain();
+    }
+
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context=context;
+        surfaceHolder=getHolder();
+        surfaceHolder.addCallback(this);
+
+        drawingThread=new DrawingThread(this,context);
+        velocityTracker=VelocityTracker.obtain();
+
+    }
+
+    public GameView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         this.context=context;
         surfaceHolder=getHolder();
         surfaceHolder.addCallback(this);
@@ -58,6 +82,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if(drawingThread.pauseFlag==true)
+        {
+            return true;
+        }
+
         Point touchPoint=new Point((int) event.getX(),(int) event.getY());
         Random random=new Random();
 
