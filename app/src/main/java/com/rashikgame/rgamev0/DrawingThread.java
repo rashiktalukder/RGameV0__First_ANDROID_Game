@@ -15,8 +15,8 @@ import java.util.ArrayList;
 public class DrawingThread extends Thread {
 
     private Canvas canvas;
-    private GameView gameView;
-    private Context context;
+     GameView gameView;
+     Context context;
 
     boolean ThreadFlag=false;
     boolean touchedFlag=false;
@@ -29,6 +29,7 @@ public class DrawingThread extends Thread {
     ArrayList<Bitmap> allPossibleRobots;
 
     AnimationThread animationThread;
+    Dock dock;
 
     public DrawingThread( GameView gameView, Context context) {
         //this.canvas = canvas;
@@ -51,6 +52,7 @@ public class DrawingThread extends Thread {
         backgroundBitmap=Bitmap.createScaledBitmap(backgroundBitmap,displayX,displayY,true);
 
         initializeAllPossibleRobots();
+        dock=new Dock(this,R.drawable.dock);
 
     }
 
@@ -113,6 +115,7 @@ public class DrawingThread extends Thread {
     private void updateDisplay() {
 
         canvas.drawBitmap(backgroundBitmap,0,0,null);
+        drawDock();
         for (int i=0;i<allRobots.size();i++)
         {
             Robot tempRobot=allRobots.get(i);
@@ -153,4 +156,8 @@ public class DrawingThread extends Thread {
         canvas.drawText("X axis: "+GameActivity.getgX(),0,displayY/3,paint);
         canvas.drawText("Y axis: "+GameActivity.getgY(),0,displayY/3+displayX/5,paint);
     }*/
+    private  void drawDock()
+    {
+        canvas.drawBitmap(dock.dockBitmap,dock.topLeftPoint.x,dock.topLeftPoint.y,null);
+    }
 }

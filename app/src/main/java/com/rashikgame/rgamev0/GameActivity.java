@@ -10,8 +10,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 public class GameActivity extends Activity {
 
@@ -46,8 +48,70 @@ public class GameActivity extends Activity {
        // gameView=new GameView(this);
         initializeSensors();
 
+
         setContentView(R.layout.activity_game);
         gameView=(GameView) findViewById(R.id.myGameView);
+        initializeButton();
+    }
+
+    private void initializeButton() {
+
+        Button moveLeftButton=findViewById(R.id.leftButton);
+        moveLeftButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        gameView.drawingThread.dock.startMovingLeft();
+                        moveLeftButton.getBackground().setAlpha(100);
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        gameView.drawingThread.dock.stopMovingLeft();
+                        moveLeftButton.getBackground().setAlpha(255);
+
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+        });
+        Button moveRightButton=findViewById(R.id.rigntButton);
+
+        moveRightButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        gameView.drawingThread.dock.startMovingRight();
+                        moveRightButton.getBackground().setAlpha(100);
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        gameView.drawingThread.dock.stopMovingRight();
+                        moveRightButton.getBackground().setAlpha(255);
+
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        /*Button moveRightButton=findViewById(R.id.rigntButton);
+        moveRightButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });*/
+
     }
 
     private void initializeSensors() {
