@@ -24,11 +24,15 @@ public class DrawingThread extends Thread {
     Bitmap backgroundBitmap;
 
     int displayX,displayY;
+    int maxScore=0;
 
     ArrayList<Robot> allRobots;
     ArrayList<Bitmap> allPossibleRobots;
 
     AnimationThread animationThread;
+    ScoreCounterThread scoreCounterThread;
+    Paint scorePaint;
+
     Dock dock;
 
     public DrawingThread( GameView gameView, Context context) {
@@ -52,7 +56,14 @@ public class DrawingThread extends Thread {
         backgroundBitmap=Bitmap.createScaledBitmap(backgroundBitmap,displayX,displayY,true);
 
         initializeAllPossibleRobots();
+        scoreCounterThread=new ScoreCounterThread(this);
+
         dock=new Dock(this,R.drawable.dock);
+        scorePaint=new Paint();
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextAlign(Paint.Align.CENTER);
+        scorePaint.setTextSize(displayX/15);
+
 
     }
 
@@ -82,6 +93,7 @@ public class DrawingThread extends Thread {
         ThreadFlag=true;
         animationThread=new AnimationThread(this);
         animationThread.start();
+        scoreCounterThread.start();
 
         while(ThreadFlag)
         {
@@ -109,6 +121,7 @@ public class DrawingThread extends Thread {
             }
 
         }
+        scoreCounterThread.stopThread();
         animationThread.stopThread();
     }
 
@@ -127,19 +140,21 @@ public class DrawingThread extends Thread {
         {
             pauseStateDraw();
         }
+        drawScore();
 
     }
 
     private void pauseStateDraw() {
         Paint paint=new Paint();
         paint.setColor(Color.GREEN);
-        paint.setTextSize(100);
+        paint.setTextSize(80);
         paint.setAlpha(150);
         paint.setTextAlign(Paint.Align.CENTER);
 
 
         canvas.drawARGB(170,0,0,0);
         canvas.drawText("PAUSED",displayX/2,displayY/2,paint);
+        canvas.drawText("HAVE A RELAX",displayX/2+20,displayY/2+100,paint);
     }
 
     public void stopThread()
@@ -159,5 +174,19 @@ public class DrawingThread extends Thread {
     private  void drawDock()
     {
         canvas.drawBitmap(dock.dockBitmap,dock.topLeftPoint.x,dock.topLeftPoint.y,null);
+    }
+    private void drawScore()
+    {
+        if(maxScore>1000)
+        {scorePaint.setColor(Color.WHITE);
+            if(maxScore>10000)
+            {scorePaint.setColor(Color.CYAN);
+                if(maxScore>100000)
+                {
+                    scorePaint.setColor(Color.RED);
+                }
+            }
+        }
+        canvas.drawText("Score: "+maxScore,displayX/2,displayY/7,scorePaint);
     }
 }

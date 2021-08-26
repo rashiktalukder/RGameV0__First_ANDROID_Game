@@ -3,6 +3,8 @@ package com.rashikgame.rgamev0;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -14,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -123,6 +126,33 @@ public class GameActivity extends Activity {
                 {
                     gX=-event.values[0];
                     gY=event.values[1];
+                    if(gY<0)
+                    {
+                        stopUsingSensors();
+                        gameView.drawingThread.animationThread.stopThread();
+                        gameView.drawingThread.scoreCounterThread.stopThread();
+
+                        AlertDialog.Builder alertBuilder=new AlertDialog.Builder(GameActivity.this);
+                        alertBuilder.setTitle("No Cheating!!");
+                        alertBuilder.setIcon(R.drawable.warning);
+                        alertBuilder.setMessage("থামেন ভাই! মোবাইল ধরা শিখেন নি নাকি?");
+
+                        alertBuilder.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                restartGame(null);
+
+                            }
+                        });
+                        alertBuilder.setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                stopGame(null);
+
+                            }
+                        });
+                        alertBuilder.show();
+                    }
                 }
 
             }
@@ -171,8 +201,9 @@ public class GameActivity extends Activity {
     {
         if(gameView.drawingThread.pauseFlag==false)
         {
+
             gameView.drawingThread.animationThread.stopThread();
-            gameView.drawingThread.pauseFlag=true;
+            gameView.drawingThread.pauseFlag=true;stopUsingSensors();
             view.setBackgroundResource(R.drawable.unlock);
         }
         else
@@ -185,7 +216,16 @@ public class GameActivity extends Activity {
     }
     public void restartGame(View view)
     {
-        gameView.drawingThread.allRobots.clear();
+        stopUsingSensors();
+        startUsingSensors();
+
+        gameView.drawingThread.stopThread();
+        gameView.drawingThread=new DrawingThread(gameView,this);
+        gameView.drawingThread.start();
+
+        Toast.makeText(this,"Game Restarted",Toast.LENGTH_SHORT).show();
+
+        //gameView.drawingThread.allRobots.clear();
     }
     public void stopGame(View view)
     {

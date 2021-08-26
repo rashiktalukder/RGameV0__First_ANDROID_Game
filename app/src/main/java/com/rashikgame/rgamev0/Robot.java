@@ -14,6 +14,8 @@ public class Robot {
     Bitmap robotBitmap;
     Paint robotPaint;
 
+    boolean robotFellDown=false;
+
     public Robot(Bitmap bitmap)
     {
         robotBitmap=bitmap;

@@ -36,7 +36,7 @@ public class Dock {
     private void updateInfo() {
 
         leftMostPoint= bottomCenterPoint.x-dockWidth/2;
-        rightMostPoint=bottomCenterPoint.x-dockWidth/2;
+    rightMostPoint=bottomCenterPoint.x+dockWidth/2;
 
         topLeftPoint.x=leftMostPoint;
     }
